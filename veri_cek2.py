@@ -1,8 +1,15 @@
+import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+
+
+# Telegram bot bilgileri
+TELEGRAM_BOT_TOKEN = "7528502742:AAGghlsMdiNfZYV0LNG4Q70WtULL1VF03Z4"
+TELEGRAM_CHAT_ID = "-4501107923"
+
 
 # Ürün bilgilerini alacak fonksiyon
 def get_product_info(soup):
@@ -65,6 +72,19 @@ def fetch_with_selenium(url):
     driver.quit()
     
     return BeautifulSoup(page_source, 'html.parser')
+
+
+# Telegram grubuna mesaj gönderme fonksiyonu
+def send_telegram_message(message):
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    data = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": message,
+        "parse_mode": "HTML"  # HTML formatında mesaj göndermek için
+    }
+    response = requests.post(url, data=data)
+    return response
+
 
 # Ana fonksiyon
 def main():
